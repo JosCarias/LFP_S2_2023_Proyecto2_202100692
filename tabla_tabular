@@ -1,25 +1,4 @@
 // Tabla HTML
 digraph {
-	tabla [label=<
-    <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
-        <TR>
-            <TD>Reporte HTML de abarrotería 1</TD>
-        </TR>
-        <TR>
-            <TD>codigo</TD>
-            <TD>producto</TD>
-            <TD>precio_compra</TD>
-            <TD>precio_venta</TD>
-            <TD>stock</TD>
-        </TR>
-        
-        <TR>
-            <TD>1</TD>
-            <TD>2</TD>
-            <TD>3</TD>
-            <TD>4</TD>
-            <TD>5</TD>
-        </TR>
-    </TABLE>
-    > shape=none]
+	tabla [label=<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0"><TR><TD>Reporte HTML de abarrotería 1</TD></TR><TR><TD>Codigo</TD><TD>Producto</TD><TD>PrecioCompra</TD><TD>PrecioVenta</TD><TD>Stock</TD></TR></TABLE>> shape=none]
 }

@@ -1,4 +1,7 @@
 import tkinter as tk
+from tkinter import filedialog
+
+from AnalizadorLexico import abrirEntrada, leerPorSimbolo
 
 def menuPrincipal():
     menu=tk.Tk()
@@ -7,13 +10,23 @@ def menuPrincipal():
     menu.resizable(False, False)
 
     panel=tk.Frame(menu, bg="gray", height=50,width=1240)
-    panel.grid(row=0,column=0,columnspan=5,padx=5, pady=5)
+    panel.grid(row=0,column=0,columnspan=2,padx=5, pady=5)
 
     txtProyecto=tk.Label(panel,text="Proyecto 2 - 202100692",bg="gray")
     txtProyecto.config(font=10)
     txtProyecto.grid(row=0,column=0, padx=5,pady=5)
 
-    bntAbrir=tk.Button(panel, text="Abrir", height=2, width=20)
+    def abrirArchivo():
+        archivo = filedialog.askopenfile(filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")])
+    
+        if archivo:
+            txbPantalla1.delete('1.0', tk.END)
+            txbPantalla1.insert(tk.END, (str(abrirEntrada(archivo.name))))
+            txbPantalla2.delete('1.0', tk.END)
+            txbPantalla2.insert(tk.END, (str(leerPorSimbolo(archivo.name))))
+
+
+    bntAbrir=tk.Button(panel, text="Abrir", height=2, width=20, command=abrirArchivo)
     bntAbrir.config(font=10)
     bntAbrir.grid(row=0,column=3,padx=5,pady=5)
 
@@ -33,9 +46,9 @@ def menuPrincipal():
     menu1.add_command(label="Árbol de derivación:",font=10)
 
     txbPantalla1 = tk.Text(menu,width=90, height=39)
-    txbPantalla1.grid(column=0,row=2,columnspan=3,padx=5,pady=5)
+    txbPantalla1.grid(column=0,row=2,padx=5,pady=5)
 
     txbPantalla2 = tk.Text(menu,width=65, height=39)
-    txbPantalla2.grid(column=3,row=2,columnspan=5, padx=5,pady=5)
+    txbPantalla2.grid(column=1,row=2, padx=5,pady=5)
 
     menu.mainloop()
