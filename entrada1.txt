@@ -1,4 +1,4 @@
-claves=[
+Claves = [
     "Codigo", "Producto", "PrecioCompra", "PrecioVenta", "Stock"
 ]
 registros = [
