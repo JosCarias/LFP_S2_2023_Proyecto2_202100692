@@ -7,11 +7,13 @@ simbolos=[]
 listaRegistros=[]
 listaClaves=[]
 listaErrores=[]
+listaMensajes=[]
+listaMensajesln=[]
 
 
 def abrirEntrada(ruta):
     salida="Contenido completo:\n"
-    with open(ruta, 'r') as archivo:
+    with open(ruta, 'r', encoding='utf-8') as archivo:
         contenido = archivo.read()
     
     salida+=(contenido)
@@ -20,7 +22,7 @@ def abrirEntrada(ruta):
 def leerPorSimbolo(ruta):
     global columna,linea
     salida="Analisis lexico:\n"
-    with open(ruta, 'r') as archivo:
+    with open(ruta, 'r', encoding='utf-8') as archivo:
         for lineas in archivo:
             for caracter in lineas:
                 if caracter.isspace():
@@ -122,8 +124,13 @@ def leerRegistros():
                 i+=1
             if simbolos[i].valor == '[':
                 i+=2
-            if simbolos[i].valor == '}':
-                i+=1
+            if simbolos[i].valor == '}' and simbolos[i+1].valor == '{':
+                listaRegistros.append(registro)
+                registro = ""
+                i+=2 
+            if simbolos[i].valor == '}' and simbolos[i+1].valor == ']':
+                listaRegistros.append(registro)
+                break 
             if simbolos[i].valor == ',':
                 listaRegistros.append(registro)
                 registro = "" 
@@ -136,24 +143,86 @@ def leerRegistros():
         i += 1  
 
     listaRegistros.pop(0)
-    #for elemento in range(len(listaRegistros)):
-    #    print(str(elemento+1)+" "+listaRegistros[elemento])
+    for elemento in range(len(listaRegistros)):
+        print(str(elemento+1)+" "+listaRegistros[elemento])
 
     
 
     return listaRegistros
 
-    
+def leerImprimir():
+    i = 0
+    imprimir = False
+    mensaje = ""
+    palabraImprimir = ""
+    sublista = ["i", "m", "p", "r", "i", "m", "i", "r","("]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "imprimir"
+        if palabraImprimir == "imprimir" and simbolos[i].valor == "(":
+            imprimir = True
+            palabraImprimir = ""
+        if imprimir == True:
+            if simbolos[i].valor == '"':
+                mensaje = ""
+                i += 1
+                while i < len(simbolos) and simbolos[i].valor != '"':
+                    mensaje += simbolos[i].valor
+                    i += 1
+                if simbolos[i].valor == '"':
+                    listaMensajes.append(mensaje)
+        if palabraImprimir == "" and simbolos[i].valor == ")":
+            imprimir = False
+
+        i += 1
+    mensaje=""
+    for elemento in range(len(listaMensajes)):
+        mensaje+=(listaMensajes[elemento])
+    print(mensaje)
+
+def leerImprimirln():
+    i = 0
+    imprimir = False
+    mensaje = ""
+    palabraImprimir = ""
+    sublista = ["i", "m", "p", "r", "i", "m", "i", "r","l","n"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "imprimirln"
+        if palabraImprimir == "imprimirln" and simbolos[i].valor == "(":
+            imprimir = True
+            palabraImprimir = ""
+        if imprimir == True:
+            if simbolos[i].valor == '"':
+                mensaje = ""
+                i += 1
+                while i < len(simbolos) and simbolos[i].valor != '"':
+                    mensaje += simbolos[i].valor
+                    i += 1
+                if simbolos[i].valor == '"':
+                    listaMensajesln.append(mensaje)
+        if palabraImprimir == "" and simbolos[i].valor == ")":
+            imprimir = False
+
+        i += 1
+
+    for elemento in range(len(listaMensajesln)):
+        print(listaMensajesln[elemento])
+
+
 
 print("--------------------------------")
 (abrirEntrada("entrada1.txt"))
 print("--------------------------------")
 (leerPorSimbolo("entrada1.txt"))
-print("--------------------------------")
-(leerClaves())
-print("--------------------------------")
-(leerRegistros())
-
+#print("--------------------------------")
+#(leerClaves())
+#print("--------------------------------")
+#(leerRegistros())
+#print("--------------------------------")
+#leerImprimir()
+#print("--------------------------------")
+#leerImprimirln()
 
 
 
