@@ -100,10 +100,10 @@ def leerClaves():
         if palabraClave == "" and simbolos[i].valor == "]":
             claves = False        
         i+=1
-    for pos in range(len(listaClaves)):
-        print(listaClaves[pos])
-    for pos in range(len(listaErrores)):
-        print(listaErrores[pos])
+    #for pos in range(len(listaClaves)):
+    #    print(listaClaves[pos])
+    #for pos in range(len(listaErrores)):
+    #    print(listaErrores[pos])
         
     return listaClaves
 
@@ -143,8 +143,8 @@ def leerRegistros():
         i += 1  
 
     listaRegistros.pop(0)
-    for elemento in range(len(listaRegistros)):
-        print(str(elemento+1)+" "+listaRegistros[elemento])
+    #for elemento in range(len(listaRegistros)):
+    #    print(str(elemento+1)+" "+listaRegistros[elemento])
 
     
 
@@ -209,6 +209,20 @@ def leerImprimirln():
     for elemento in range(len(listaMensajesln)):
         print(listaMensajesln[elemento])
 
+def leerConteo():
+    i = 0
+    conteo=""
+    sublista = ["c","o","n","t","e","o"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            conteo = "conteo"
+        if conteo == "conteo":
+            print("Numero de registros: "+str(len(listaRegistros)))
+            break
+        i += 1  
+            
+
+
 
 
 print("--------------------------------")
@@ -216,13 +230,16 @@ print("--------------------------------")
 print("--------------------------------")
 (leerPorSimbolo("entrada1.txt"))
 #print("--------------------------------")
-#(leerClaves())
+(leerClaves())
 #print("--------------------------------")
-#(leerRegistros())
+(leerRegistros())
 #print("--------------------------------")
 #leerImprimir()
 #print("--------------------------------")
 #leerImprimirln()
+print("--------------------------------")
+leerConteo()
+
 
 
 
