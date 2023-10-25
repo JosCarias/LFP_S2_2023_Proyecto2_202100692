@@ -1,13 +1,13 @@
 from graphviz import Digraph
 
-from AnalizadorLexico import *
+from AnalizadorLexico import listaClaves,listaRegistros, reporte
 
 
 def reporteHtml():
     dot = Digraph(comment='Tabla HTML')
 
     tabla_html = '''<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">'''
-    tabla_html +='''<TR><TD>Reporte HTML de abarrotería 1</TD></TR>'''
+    tabla_html +='''<TR><TD>'''+reporte()+'''</TD></TR>'''
     
     tabla_html +='''<TR>'''
     for pos in range(len(listaClaves)):
@@ -16,9 +16,6 @@ def reporteHtml():
 
     numeroDeFilas=int(((len(listaRegistros))/(len(listaClaves))))
     numeroDeColumnas=int((len(listaClaves)))
-    
-    print("Filas:"+str(numeroDeFilas))
-    print("Columnas:"+str(numeroDeColumnas))
 
     for filas in range(numeroDeFilas):
         tabla_html +='''<TR>'''
@@ -31,4 +28,3 @@ def reporteHtml():
     dot.node('tabla', label=tabla_html, shape='none')
     dot.render('tabla_tabular', view=True)
 
-reporteHtml()

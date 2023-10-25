@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
 
-from AnalizadorLexico import abrirEntrada, leerPorSimbolo
+from AnalizadorLexico import abrirEntrada, leerPorSimbolo,errores
+
+ruta=""
 
 def menuPrincipal():
     menu=tk.Tk()
@@ -17,13 +19,14 @@ def menuPrincipal():
     txtProyecto.grid(row=0,column=0, padx=5,pady=5)
 
     def abrirArchivo():
+        global ruta
         archivo = filedialog.askopenfile(filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")])
     
         if archivo:
+            ruta=archivo.name
             txbPantalla1.delete('1.0', tk.END)
-            txbPantalla1.insert(tk.END, (str(abrirEntrada(archivo.name))))
-            txbPantalla2.delete('1.0', tk.END)
-            txbPantalla2.insert(tk.END, (str(leerPorSimbolo(archivo.name))))
+            txbPantalla1.insert(tk.END, (str(abrirEntrada(ruta))))
+            
 
 
     bntAbrir=tk.Button(panel, text="Abrir", height=2, width=20, command=abrirArchivo)
@@ -41,8 +44,18 @@ def menuPrincipal():
     menu1 = tk.Menu(menuDeslizable1, tearoff=0)
     menuDeslizable1['menu'] = menu1
 
-    menu1.add_command(label="Reporte de errores:",font=10)
-    menu1.add_command(label="Reporte de tokens:",font=10)
+    def desplegarErrores():
+        txbPantalla1.delete('1.0', tk.END)
+        txbPantalla1.insert(tk.END, (str(errores())))
+
+    menu1.add_command(label="Reporte de errores:",font=10,command=desplegarErrores)
+    
+    def desplegarTokens():
+        global ruta
+        txbPantalla2.delete('1.0', tk.END)
+        txbPantalla2.insert(tk.END, (str(leerPorSimbolo(ruta))))
+
+    menu1.add_command(label="Reporte de tokens:",font=10, command= desplegarTokens)
     menu1.add_command(label="Árbol de derivación:",font=10)
 
     txbPantalla1 = tk.Text(menu,width=90, height=39)

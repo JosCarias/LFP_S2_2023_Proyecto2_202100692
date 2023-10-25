@@ -28,13 +28,13 @@ imprimirln("Abarroteria1");
 
 conteo();
 
-promedio("strock");
+promedio("Stock");
 
-contarsi("stock",0);
+contarsi("Stock",6);
 
 datos();
 
-sumar("stock");
+sumar("Stock");
 
 max("Precio_Venta");
 

@@ -144,7 +144,7 @@ def leerRegistros():
 
     listaRegistros.pop(0)
     #for elemento in range(len(listaRegistros)):
-    #    print(str(elemento+1)+" "+listaRegistros[elemento])
+    #    print(str(elemento)+" "+listaRegistros[elemento])
 
     
 
@@ -220,25 +220,287 @@ def leerConteo():
             print("Numero de registros: "+str(len(listaRegistros)))
             break
         i += 1  
+
+def leerDatos():
+    i = 0
+    datos=""
+    sublista = ["d","a","t","o","s"]
+    tabla_html =""
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            datos = "datos"
+        if datos == "datos":
+            tabla_html +='|'
+            for pos in range(len(listaClaves)):
+                tabla_html += str(listaClaves[pos])+ "|"
+            tabla_html +='\n'
+            numeroDeFilas=int(((len(listaRegistros))/(len(listaClaves))))
+            numeroDeColumnas=int((len(listaClaves)))
+
+            for filas in range(numeroDeFilas):
+                tabla_html +='|'
+                for columna in range(numeroDeColumnas):
+                    tabla_html += str(listaRegistros[(filas*numeroDeColumnas)+columna])+ "|"
+                tabla_html +='\n'
+            break
+        i += 1  
+    print(tabla_html)   
+
+def Promedio(palabra):
+    posicion=0
+    promedio=0
+    palabra=palabra
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        promedio+=float((listaRegistros[pos]))
+    numeroDeFilas=int(((len(listaRegistros))/(len(listaClaves))))
+    print("El promedio de "+str(listaClaves[posicion])+" es: "+str(promedio/numeroDeFilas))
+
+def leerPromedio():
+    i = 0
+    imprimir = False
+    mensaje = ""
+    palabraImprimir = ""
+    sublista = ["p", "r", "o", "m", "e", "d", "i", "o"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "promedio"
+        if palabraImprimir == "promedio" and simbolos[i].valor == "(":
+            imprimir = True
+            palabraImprimir = ""
+        if imprimir == True:
+            if simbolos[i].valor != '(':
+                mensaje+=simbolos[i].valor 
+            if simbolos[i].valor == '"' and simbolos[i+1].valor == ')':
+                imprimir = False
+        if palabraImprimir == "" and simbolos[i].valor == ")":
+            imprimir = False   
+        i += 1
+
+    Promedio(mensaje)
             
+       
+        
+def contarSi(clave,valor):
+    posicion=0
+    existencia=0
+    while listaClaves[posicion]!=clave:
+        posicion+=1
+
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        if float(listaRegistros[pos])== valor:           
+            existencia+=1  
+    print("La registros que cumplen esta condicon son: "+str(existencia))
+
+def leerContarSi():
+    i = 0
+    valor=""
+    imprimir = False
+    valor=""
+    palabraImprimir = ""
+    sublista = ["c", "o", "n", "t", "a","r", "s", "i"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "contarSi"
+        if palabraImprimir == "contarSi" and simbolos[i].valor == "(":
+            imprimir = True
+            palabraImprimir = ""
+        if imprimir == True and palabraImprimir=="":
+            if simbolos[i].valor == "(" and simbolos[i+1].valor == '"':
+                i+=1
+                while i < len(simbolos) and simbolos[i].valor != ",":
+                    palabraImprimir += simbolos[i].valor
+                    i+= 1
+            if simbolos[i].valor == "," and valor=="":
+                i+=1
+                while i < len(simbolos) and simbolos[i].valor != ")":
+                    valor += simbolos[i].valor
+                    i+= 1           
+        if palabraImprimir == "" and simbolos[i].valor == ")":
+            imprimir = False
+        i += 1
+    contarSi(palabraImprimir,float(valor))
+
+def sumar(palabra):
+    posicion=0
+    suma=0
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        suma+=float((listaRegistros[pos]))
+    print("El suma de "+str(listaClaves[posicion])+" es: "+str(suma))
+
+def leerSuma():
+    i = 0
+    imprimir = False
+    mensaje = ""
+    palabraImprimir = ""
+    sublista = ["s", "u", "m", "a"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "suma"
+        if palabraImprimir == "suma" and simbolos[i].valor == "(":
+            imprimir = True
+            palabraImprimir = ""
+        if imprimir == True:
+            if simbolos[i].valor != '(':
+                mensaje+=simbolos[i].valor 
+            if simbolos[i].valor == '"' and simbolos[i+1].valor == ')':
+                imprimir = False
+        if palabraImprimir == "" and simbolos[i].valor == ")":
+            imprimir = False   
+        i += 1
+
+    sumar(mensaje)
+
+def max(palabra):
+    posicion=0
+    max=0
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        if float(listaRegistros[pos])> max:
+            max=float(listaRegistros[pos])
+    print("El valor max de "+str(listaClaves[posicion])+" es: "+str(max))
+
+def leerMax():
+    i = 0
+    imprimir = False
+    mensaje = ""
+    palabraImprimir = ""
+    sublista = ["m", "a", "x"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "max"
+        if palabraImprimir == "max" and simbolos[i].valor == "(":
+            imprimir = True
+            palabraImprimir = ""
+        if imprimir == True:
+            if simbolos[i].valor != '(':
+                mensaje+=simbolos[i].valor 
+            if simbolos[i].valor == '"' and simbolos[i+1].valor == ')':
+                imprimir = False
+        if palabraImprimir == "" and simbolos[i].valor == ")":
+            imprimir = False   
+        i += 1
+
+    max(mensaje)
+
+def min(palabra):
+    posicion=0
+    min=0
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+
+    min=listaRegistros[posicion]
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        if float(listaRegistros[pos])< float(min):
+            min=(listaRegistros[pos])
+    print("El valor min de "+str(listaClaves[posicion])+" es: "+str(min))
+
+def leerMin():
+    i = 0
+    imprimir = False
+    mensaje = ""
+    palabraImprimir = ""
+    sublista = ["m", "i", "n"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "max"
+        if palabraImprimir == "max" and simbolos[i].valor == "(":
+            imprimir = True
+            palabraImprimir = ""
+        if imprimir == True:
+            if simbolos[i].valor != '(':
+                mensaje+=simbolos[i].valor 
+            if simbolos[i].valor == '"' and simbolos[i+1].valor == ')':
+                imprimir = False
+        if palabraImprimir == "" and simbolos[i].valor == ")":
+            imprimir = False   
+        i += 1
+
+    min(mensaje)
+
+def reporte():
+    i = 0
+    mensaje = ""
+    palabraImprimir = ""
+    sublista = ["e", "x", "p", "o", "r", "t", "a", "r", "R", "e", "p", "o", "r", "t", "e"]
+    
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            palabraImprimir = "exportarReporte"
+        if palabraImprimir == "exportarReporte" and simbolos[i].valor == "(":
+            palabraImprimir = ""
+            i += 1
+            while i < len(simbolos) and simbolos[i].valor != '"':
+                mensaje += simbolos[i].valor
+                i += 1
+            if mensaje:  
+                mensaje = mensaje.strip(");") 
+
+        i += 1
+    return mensaje
+
+def errores():
+    salida=""
+    for pos in range(len(listaErrores)):
+        salida+=listaErrores[pos]+"\n"
+    return salida
+
+#print("--------------------------------")
+#(abrirEntrada("entrada2.txt"))
+#print("--------------------------------")
+#(leerPorSimbolo("entrada2.txt"))
+##print("--------------------------------")
+#(leerClaves())
+##print("--------------------------------")
+#(leerRegistros())
+#print("--------------------------------")
+##leerImprimir()
+#print("--------------------------------")
+##leerImprimirln()
+#print("--------------------------------")
+##leerConteo()
+#print("--------------------------------")
+##leerDatos()
+#print("--------------------------------")
+##leerPromedio()
+#print("--------------------------------")
+##leerContarSi()
+#print("--------------------------------")
+##leerSuma()
+#print("--------------------------------")
+##leerMax()
+#print("--------------------------------")
+##leerMin()
+#print("--------------------------------")
+##reporte()
+#print("--------------------------------")
+#print(errores())
 
 
-
-
-print("--------------------------------")
-(abrirEntrada("entrada1.txt"))
-print("--------------------------------")
-(leerPorSimbolo("entrada1.txt"))
-#print("--------------------------------")
-(leerClaves())
-#print("--------------------------------")
-(leerRegistros())
-#print("--------------------------------")
-#leerImprimir()
-#print("--------------------------------")
-#leerImprimirln()
-print("--------------------------------")
-leerConteo()
 
 
 

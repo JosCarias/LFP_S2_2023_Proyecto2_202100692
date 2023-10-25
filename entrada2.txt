@@ -1,5 +1,5 @@
 Claves = [
-    "Codigo", "Producto", "PrecioCompra", "PrecioVenta", "Stock", "pais", "bodega"
+    "Codigo", "Producto""PrecioCompra", "PrecioVenta, "Stock", "pais", "bodega"
 ]
 registros = [
     {1, "Barbacoa", 10.50, 20.00, 6},
