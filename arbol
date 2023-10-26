@@ -1,0 +1,50 @@
+// Árbol Simple
+digraph {
+	Claves [label=Claves]
+	"\"Codigo\"" [label="\"Codigo\""]
+	"\"Producto\"" [label="\"Producto\""]
+	"\"Precio_Compra\"" [label="\"Precio_Compra\""]
+	"\"Precio_Venta\"" [label="\"Precio_Venta\""]
+	"\"Stock\"" [label="\"Stock\""]
+	Claves -> "\"Codigo\""
+	Claves -> "\"Producto\""
+	Claves -> "\"Precio_Compra\""
+	Claves -> "\"Precio_Venta\""
+	Claves -> "\"Stock\""
+	Registros [label=Registros]
+	"1 \"Barbacoa\" 10.50 20.00 6 " [label="1 \"Barbacoa\" 10.50 20.00 6 "]
+	Registros -> "1 \"Barbacoa\" 10.50 20.00 6 "
+	"2 \"Salsa\" 13.00 16.00 7 " [label="2 \"Salsa\" 13.00 16.00 7 "]
+	Registros -> "2 \"Salsa\" 13.00 16.00 7 "
+	"3 \"Mayonesa\" 15.00 18.00 8 " [label="3 \"Mayonesa\" 15.00 18.00 8 "]
+	Registros -> "3 \"Mayonesa\" 15.00 18.00 8 "
+	"4 \"Mostaza\" 14.00 16.00 4 " [label="4 \"Mostaza\" 14.00 16.00 4 "]
+	Registros -> "4 \"Mostaza\" 14.00 16.00 4 "
+	"5 \"Ketchup\" 12.00 15.50 5 " [label="5 \"Ketchup\" 12.00 15.50 5 "]
+	Registros -> "5 \"Ketchup\" 12.00 15.50 5 "
+	"6 \"MostazaDijon\" 16.00 19.00 3 " [label="6 \"MostazaDijon\" 16.00 19.00 3 "]
+	Registros -> "6 \"MostazaDijon\" 16.00 19.00 3 "
+	"7 \"SalsadeTomate\" 11.50 14.00 9 " [label="7 \"SalsadeTomate\" 11.50 14.00 9 "]
+	Registros -> "7 \"SalsadeTomate\" 11.50 14.00 9 "
+	"8 \"AderezoRanch\" 17.00 20.50 2 " [label="8 \"AderezoRanch\" 17.00 20.50 2 "]
+	Registros -> "8 \"AderezoRanch\" 17.00 20.50 2 "
+	"9 \"Miel\" 9.00 12.00 10 " [label="9 \"Miel\" 9.00 12.00 10 "]
+	Registros -> "9 \"Miel\" 9.00 12.00 10 "
+	"10 \"VinagreBalsamico\" 18.00 22.00 6 " [label="10 \"VinagreBalsamico\" 18.00 22.00 6 "]
+	Registros -> "10 \"VinagreBalsamico\" 18.00 22.00 6 "
+	imprimir [label=imprimir]
+	Reportede [label=Reportede]
+	imprimir -> Reportede
+	Abarroteria [label=Abarroteria]
+	imprimir -> Abarroteria
+	imprimirln [label=imprimirln]
+	Reportede1 [label=Reportede1]
+	imprimirln -> Reportede1
+	Abarroteria1 [label=Abarroteria1]
+	imprimirln -> Abarroteria1
+	"Árbol de derivación" [label="Árbol de derivación"]
+	"Árbol de derivación" -> Claves
+	"Árbol de derivación" -> Registros
+	"Árbol de derivación" -> imprimir
+	"Árbol de derivación" -> imprimirln
+}

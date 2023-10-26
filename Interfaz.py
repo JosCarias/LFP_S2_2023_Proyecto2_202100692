@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
 
-from AnalizadorLexico import abrirEntrada, leerPorSimbolo,errores
+from AnalizadorLexico import *
+from Tablas import *
+from Graficas import *
 
 ruta=""
 
@@ -18,6 +20,24 @@ def menuPrincipal():
     txtProyecto.config(font=10)
     txtProyecto.grid(row=0,column=0, padx=5,pady=5)
 
+    def funciones(ruta):
+        salida=""
+        leerPorSimbolo(ruta)
+        leerClaves()
+        leerRegistros()
+        salida+=reporte()+"\n"
+        salida+=leerImprimir()+"\n"
+        salida+=leerImprimirln()+"\n"
+        salida+=leerConteo()+"\n"
+        salida+=leerDatos()+"\n"
+        salida+=leerPromedio()+"\n"
+        salida+=leerContarSi()+"\n"
+        salida+=leerSuma()+"\n"
+        salida+=leerMax()+"\n"
+        salida+=leerMin()+"\n"
+        reporteHtml()
+        return salida
+
     def abrirArchivo():
         global ruta
         archivo = filedialog.askopenfile(filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")])
@@ -26,14 +46,17 @@ def menuPrincipal():
             ruta=archivo.name
             txbPantalla1.delete('1.0', tk.END)
             txbPantalla1.insert(tk.END, (str(abrirEntrada(ruta))))
-            
-
 
     bntAbrir=tk.Button(panel, text="Abrir", height=2, width=20, command=abrirArchivo)
     bntAbrir.config(font=10)
     bntAbrir.grid(row=0,column=3,padx=5,pady=5)
 
-    bntActualizar=tk.Button(panel, text="Actualizar", height=2, width=20)
+    def analizarArchivo():
+        global ruta
+        txbPantalla2.delete('1.0', tk.END)
+        txbPantalla2.insert(tk.END, (str(funciones(ruta))))
+
+    bntActualizar=tk.Button(panel, text="Analizar", height=2, width=20,command=analizarArchivo)
     bntActualizar.config(font=10)
     bntActualizar.grid(row=0,column=4,padx=5,pady=5)
 
@@ -56,7 +79,12 @@ def menuPrincipal():
         txbPantalla2.insert(tk.END, (str(leerPorSimbolo(ruta))))
 
     menu1.add_command(label="Reporte de tokens:",font=10, command= desplegarTokens)
-    menu1.add_command(label="Árbol de derivación:",font=10)
+
+    def desplegarGrafica():
+        global ruta
+        grafica()
+
+    menu1.add_command(label="Árbol de derivación:",font=10 ,command=desplegarGrafica)
 
     txbPantalla1 = tk.Text(menu,width=90, height=39)
     txbPantalla1.grid(column=0,row=2,padx=5,pady=5)

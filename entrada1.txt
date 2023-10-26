@@ -5,8 +5,8 @@ registros = [
     {1, "Barbacoa", 10.50, 20.00, 6}
     {2, "Salsa", 13.00, 16.00, 7}
     {3, "Mayonesa", 15.00, 18.00, 8}
-    {4, "Mostaza", 14.00, 16.00, 4}
-    {5, "Ketchup", 12.00, 15.50, 5}
+    {4, "Mostaza", 14.00, 16.00, 6}
+    {5, "Ketchup", 12.00, 15.50, 8}
     {6, "Mostaza Dijon", 16.00, 19.00, 3}
     {7, "Salsa de Tomate", 11.50, 14.00, 9}
     {8, "Aderezo Ranch", 17.00, 20.50, 2}
@@ -14,31 +14,20 @@ registros = [
     {10, "Vinagre Balsamico", 18.00, 22.00, 6}
 ]
 # prueba de comentarios 1
-
 '''
 comentarios 
 multilinea
 '''
-
 imprimir("Reporte de");
 imprimir("Abarroteria");
-
 imprimirln("Reporte de 1");
 imprimirln("Abarroteria1");
-
 conteo();
-
 promedio("Stock");
-
 contarsi("Stock",6);
-
 datos();
-
 sumar("Stock");
-
 max("Precio_Venta");
-
 min("Precio_Compra")
-
 exportarReporte(“titulo”);
 

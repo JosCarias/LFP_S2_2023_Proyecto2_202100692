@@ -1,6 +1,6 @@
 from graphviz import Digraph
 
-from AnalizadorLexico import listaClaves,listaRegistros, reporte
+from AnalizadorLexico import *
 
 
 def reporteHtml():
@@ -27,4 +27,5 @@ def reporteHtml():
 
     dot.node('tabla', label=tabla_html, shape='none')
     dot.render('tabla_tabular', view=True)
+
 

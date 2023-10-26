@@ -1,4 +1,4 @@
-from collections import namedtuple 
+from collections import namedtuple
 
 Simbolo= namedtuple("Simbolo",["valor", "linea", "columna"])
 linea=1
@@ -53,18 +53,21 @@ def leerClaves():
             #caso 1 " "
             if simbolos[i].valor=='"' and simbolos[i+1].valor=='"':
                 clave+=simbolos[i].valor
+                listaClaves.append(clave) 
                 listaErrores.append("falta una ,: "+ clave)
                 clave=""
                 i+=1
             #caso 2 clave,"
             if simbolos[i].valor!='"' and simbolos[i+1].valor==",":
                 clave+=simbolos[i].valor
+                listaClaves.append(clave+'"') 
                 listaErrores.append('''falta una " al final: '''+ clave)
                 clave=""
                 i+=2
             #caso 3 clave]
             if simbolos[i].valor!='"' and simbolos[i+1].valor=="]":
                 clave+=simbolos[i].valor
+                listaClaves.append(clave+'"')
                 listaErrores.append('''falta una " al final: '''+ clave)
                 clave=""
                 break
@@ -74,7 +77,8 @@ def leerClaves():
                 while simbolos[i].valor!='"':
                     error+=simbolos[i+1].valor                   
                     i+=1
-                listaErrores.append('''falta una " al inicio: '''+error)           
+                listaClaves.append('"'+error)
+                listaErrores.append('''falta una " al inicio: '''+error)          
                 clave = ""
                 i+=2
             #caso 5 ,clave
@@ -83,6 +87,7 @@ def leerClaves():
                 while simbolos[i].valor!='"':
                     error+=simbolos[i+1].valor                   
                     i+=1
+                listaClaves.append('"'+error)
                 listaErrores.append('''falta una " al inicio: '''+error)           
                 i+=1
             #para eliminar [ de mas
@@ -100,10 +105,6 @@ def leerClaves():
         if palabraClave == "" and simbolos[i].valor == "]":
             claves = False        
         i+=1
-    #for pos in range(len(listaClaves)):
-    #    print(listaClaves[pos])
-    #for pos in range(len(listaErrores)):
-    #    print(listaErrores[pos])
         
     return listaClaves
 
@@ -120,6 +121,46 @@ def leerRegistros():
             registros = True
             palabraregistro = "" 
         if registros==True:
+            #caso 1 [ registro
+            if simbolos[i].valor == '[' and simbolos[i+1].valor != '{':
+                error=""
+                while simbolos[i].valor !=",":
+                    error+=simbolos[i].valor
+                    i+=1
+                listaErrores.append("Falta una {: "+error)                               
+                listaRegistros.append(error[1:])
+            #caso 2 registro {
+            if simbolos[i].valor != '}' and simbolos[i+1].valor == '{' and simbolos[i].valor != '[':
+                i+=1
+                pos=i
+                error=""
+                while simbolos[pos].valor != ',':
+                    pos-=1
+                for sim in range(pos+1,i):
+                    error+=simbolos[sim].valor
+                listaErrores.append("Falta una }: "+error)
+                listaRegistros.append(error)
+                registro=""
+            #caso 3 }registro
+            if simbolos[i].valor == '}' and simbolos[i+1].valor != '{' and simbolos[i+1].valor != ']':
+                listaErrores.append("Falta una }: "+simbolos[i-1].valor)
+                listaRegistros.append(registro)
+                i+=1
+                registro=""
+                            
+            #caso 4 registro]
+            if simbolos[i].valor != '}' and simbolos[i+1].valor == ']' and simbolos[i].valor != '[':
+                i+=1
+                pos=i
+                error=""
+                while simbolos[pos].valor != ',':
+                    pos-=1
+                for sim in range(pos+1,i):
+                    error+=simbolos[sim].valor
+                listaErrores.append("Falta una }: "+error)
+                listaRegistros.append(error)
+
+            #mundo perfecto
             if simbolos[i].valor == '{':
                 i+=1
             if simbolos[i].valor == '[':
@@ -142,11 +183,10 @@ def leerRegistros():
             registros = False      
         i += 1  
 
-    listaRegistros.pop(0)
-    #for elemento in range(len(listaRegistros)):
-    #    print(str(elemento)+" "+listaRegistros[elemento])
+    for elemento in listaRegistros[:]:
+        if elemento == "" or elemento is None:
+            listaRegistros.remove(elemento)
 
-    
 
     return listaRegistros
 
@@ -177,8 +217,8 @@ def leerImprimir():
         i += 1
     mensaje=""
     for elemento in range(len(listaMensajes)):
-        mensaje+=(listaMensajes[elemento])
-    print(mensaje)
+        mensaje+=(listaMensajes[elemento])+" "
+    return mensaje
 
 def leerImprimirln():
     i = 0
@@ -205,61 +245,11 @@ def leerImprimirln():
             imprimir = False
 
         i += 1
-
+    mensaje=""
     for elemento in range(len(listaMensajesln)):
-        print(listaMensajesln[elemento])
+        mensaje+=(listaMensajesln[elemento])+"\n"   
+    return mensaje
 
-def leerConteo():
-    i = 0
-    conteo=""
-    sublista = ["c","o","n","t","e","o"]
-    while i < len(simbolos):
-        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
-            conteo = "conteo"
-        if conteo == "conteo":
-            print("Numero de registros: "+str(len(listaRegistros)))
-            break
-        i += 1  
-
-def leerDatos():
-    i = 0
-    datos=""
-    sublista = ["d","a","t","o","s"]
-    tabla_html =""
-    while i < len(simbolos):
-        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
-            datos = "datos"
-        if datos == "datos":
-            tabla_html +='|'
-            for pos in range(len(listaClaves)):
-                tabla_html += str(listaClaves[pos])+ "|"
-            tabla_html +='\n'
-            numeroDeFilas=int(((len(listaRegistros))/(len(listaClaves))))
-            numeroDeColumnas=int((len(listaClaves)))
-
-            for filas in range(numeroDeFilas):
-                tabla_html +='|'
-                for columna in range(numeroDeColumnas):
-                    tabla_html += str(listaRegistros[(filas*numeroDeColumnas)+columna])+ "|"
-                tabla_html +='\n'
-            break
-        i += 1  
-    print(tabla_html)   
-
-def Promedio(palabra):
-    posicion=0
-    promedio=0
-    palabra=palabra
-    while listaClaves[posicion]!=palabra:
-        posicion+=1
-    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
-        primer_caracter = listaRegistros[pos][0]
-        if listaRegistros[pos][0]==primer_caracter=='"':
-            print("Esta columna es de tipo string: "+listaClaves[posicion])
-            break
-        promedio+=float((listaRegistros[pos]))
-    numeroDeFilas=int(((len(listaRegistros))/(len(listaClaves))))
-    print("El promedio de "+str(listaClaves[posicion])+" es: "+str(promedio/numeroDeFilas))
 
 def leerPromedio():
     i = 0
@@ -282,25 +272,8 @@ def leerPromedio():
             imprimir = False   
         i += 1
 
-    Promedio(mensaje)
+    return Promedio(mensaje)
             
-       
-        
-def contarSi(clave,valor):
-    posicion=0
-    existencia=0
-    while listaClaves[posicion]!=clave:
-        posicion+=1
-
-    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
-        primer_caracter = listaRegistros[pos][0]
-        if listaRegistros[pos][0]==primer_caracter=='"':
-            print("Esta columna es de tipo string: "+listaClaves[posicion])
-            break
-        if float(listaRegistros[pos])== valor:           
-            existencia+=1  
-    print("La registros que cumplen esta condicon son: "+str(existencia))
-
 def leerContarSi():
     i = 0
     valor=""
@@ -328,20 +301,10 @@ def leerContarSi():
         if palabraImprimir == "" and simbolos[i].valor == ")":
             imprimir = False
         i += 1
-    contarSi(palabraImprimir,float(valor))
 
-def sumar(palabra):
-    posicion=0
-    suma=0
-    while listaClaves[posicion]!=palabra:
-        posicion+=1
-    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
-        primer_caracter = listaRegistros[pos][0]
-        if listaRegistros[pos][0]==primer_caracter=='"':
-            print("Esta columna es de tipo string: "+listaClaves[posicion])
-            break
-        suma+=float((listaRegistros[pos]))
-    print("El suma de "+str(listaClaves[posicion])+" es: "+str(suma))
+    return contarSi(palabraImprimir,float(valor))
+
+
 
 def leerSuma():
     i = 0
@@ -364,21 +327,8 @@ def leerSuma():
             imprimir = False   
         i += 1
 
-    sumar(mensaje)
+    return sumar(mensaje)
 
-def max(palabra):
-    posicion=0
-    max=0
-    while listaClaves[posicion]!=palabra:
-        posicion+=1
-    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
-        primer_caracter = listaRegistros[pos][0]
-        if listaRegistros[pos][0]==primer_caracter=='"':
-            print("Esta columna es de tipo string: "+listaClaves[posicion])
-            break
-        if float(listaRegistros[pos])> max:
-            max=float(listaRegistros[pos])
-    print("El valor max de "+str(listaClaves[posicion])+" es: "+str(max))
 
 def leerMax():
     i = 0
@@ -401,23 +351,7 @@ def leerMax():
             imprimir = False   
         i += 1
 
-    max(mensaje)
-
-def min(palabra):
-    posicion=0
-    min=0
-    while listaClaves[posicion]!=palabra:
-        posicion+=1
-
-    min=listaRegistros[posicion]
-    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
-        primer_caracter = listaRegistros[pos][0]
-        if listaRegistros[pos][0]==primer_caracter=='"':
-            print("Esta columna es de tipo string: "+listaClaves[posicion])
-            break
-        if float(listaRegistros[pos])< float(min):
-            min=(listaRegistros[pos])
-    print("El valor min de "+str(listaClaves[posicion])+" es: "+str(min))
+    return max(mensaje)
 
 def leerMin():
     i = 0
@@ -440,7 +374,7 @@ def leerMin():
             imprimir = False   
         i += 1
 
-    min(mensaje)
+    return min(mensaje)
 
 def reporte():
     i = 0
@@ -469,39 +403,120 @@ def errores():
         salida+=listaErrores[pos]+"\n"
     return salida
 
-#print("--------------------------------")
-#(abrirEntrada("entrada2.txt"))
-#print("--------------------------------")
-#(leerPorSimbolo("entrada2.txt"))
-##print("--------------------------------")
-#(leerClaves())
-##print("--------------------------------")
-#(leerRegistros())
-#print("--------------------------------")
-##leerImprimir()
-#print("--------------------------------")
-##leerImprimirln()
-#print("--------------------------------")
-##leerConteo()
-#print("--------------------------------")
-##leerDatos()
-#print("--------------------------------")
-##leerPromedio()
-#print("--------------------------------")
-##leerContarSi()
-#print("--------------------------------")
-##leerSuma()
-#print("--------------------------------")
-##leerMax()
-#print("--------------------------------")
-##leerMin()
-#print("--------------------------------")
-##reporte()
-#print("--------------------------------")
-#print(errores())
+def leerConteo():
+    i = 0
+    conteo=""
+    sublista = ["c","o","n","t","e","o"]
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            conteo = "conteo"
+        if conteo == "conteo":
+            break
+        i += 1  
+    return "Numero de registros: "+str(len(listaRegistros))
+
+def Promedio(palabra):
+    posicion=0
+    promedio=0
+    palabra=palabra
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        promedio+=float((listaRegistros[pos]))
+    numeroDeFilas=int(((len(listaRegistros))/(len(listaClaves))))
+
+    return("El promedio de "+str(listaClaves[posicion])+" es: "+str(promedio/numeroDeFilas))
+
+def contarSi(clave,valor):
+    posicion=0
+    existencia=0
+    while listaClaves[posicion]!=clave:
+        posicion+=1
+
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        if float(listaRegistros[pos])== valor:           
+            existencia+=1  
+    return ("La registros que cumplen esta condicon son: "+str(existencia))
+
+def sumar(palabra):
+    posicion=0
+    suma=0
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            print("Esta columna es de tipo string: "+listaClaves[posicion])
+            break
+        suma+=float((listaRegistros[pos]))
+    return ("El suma de "+str(listaClaves[posicion])+" es: "+str(suma))
+
+def max(palabra):
+    posicion=0
+    max=0
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            return("Esta columna es de tipo string: "+listaClaves[posicion])
+        if float(listaRegistros[pos])> max:
+            max=float(listaRegistros[pos])
+    return ("El valor max de "+str(listaClaves[posicion])+" es: "+str(max))
+
+def min(palabra):
+    posicion=0
+    min=0
+    while listaClaves[posicion]!=palabra:
+        posicion+=1
+
+    min=listaRegistros[posicion]
+    for pos in range(posicion,len(listaRegistros,), len(listaClaves)):
+        primer_caracter = listaRegistros[pos][0]
+        if listaRegistros[pos][0]==primer_caracter=='"':
+            return("Esta columna es de tipo string: "+listaClaves[posicion])
+        if float(listaRegistros[pos])< float(min):
+            min=(listaRegistros[pos])
+    return("El valor min de "+str(listaClaves[posicion])+" es: "+str(min))
+
+def leerDatos():
+    i = 0
+    datos=""
+    sublista = ["d","a","t","o","s"]
+    tabla_html =""
+    while i < len(simbolos):
+        if all(simbolos[i + j].valor == sublista[j] for j in range(len(sublista))):
+            datos = "datos"
+        if datos == "datos":
+            tabla_html +='|'
+            for pos in range(len(listaClaves)):
+                tabla_html += str(listaClaves[pos])+ "|"
+            tabla_html +='\n'
+            numeroDeFilas=int(((len(listaRegistros))/(len(listaClaves))))
+            numeroDeColumnas=int((len(listaClaves)))
+
+            for filas in range(numeroDeFilas):
+                tabla_html +='|'
+                for columna in range(numeroDeColumnas):
+                    tabla_html += str(listaRegistros[(filas*numeroDeColumnas)+columna])+ "|"
+                tabla_html +='\n'
+            break
+        i += 1  
+    return(tabla_html)
 
 
-
+#abrirEntrada("entrada1.txt")
+#leerPorSimbolo("entrada1.txt")
+#leerClaves()
+#leerRegistros()
 
 
 
